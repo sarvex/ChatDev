@@ -1,6 +1,6 @@
 # Communicative Agents for Software Development
 
-<p align="center">   <img src='./misc/logo1.png' width=400> </p>
+<p align="center">   <img src='./misc/logo1.png' width=600> </p>
 
 ## 📖 概述
 
