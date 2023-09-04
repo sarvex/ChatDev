@@ -55,18 +55,18 @@ class SystemMessageGenerator:
             tester_prompt_template = templates.get_system_prompt(task_type, RoleType.CHATDEV_TESTER)
             cco_prompt_template = templates.get_system_prompt(task_type, RoleType.CHATDEV_CCO)
 
-            self.sys_prompts = dict()
-            self.sys_prompts[RoleType.CHATDEV] = agenttech_prompt_template
-            self.sys_prompts[RoleType.CHATDEV_COUNSELOR] = counselor_prompt_template
-            self.sys_prompts[RoleType.CHATDEV_CEO] = ceo_prompt_template
-            self.sys_prompts[RoleType.CHATDEV_CHRO] = chro_prompt_template
-            self.sys_prompts[RoleType.CHATDEV_CPO] = cpo_prompt_template
-            self.sys_prompts[RoleType.CHATDEV_CTO] = cto_prompt_template
-            self.sys_prompts[RoleType.CHATDEV_PROGRAMMER] = programmer_prompt_template
-            self.sys_prompts[RoleType.CHATDEV_REVIEWER] = reviewer_prompt_template
-            self.sys_prompts[RoleType.CHATDEV_TESTER] = tester_prompt_template
-            self.sys_prompts[RoleType.CHATDEV_CCO] = cco_prompt_template
-
+            self.sys_prompts = {
+                RoleType.CHATDEV: agenttech_prompt_template,
+                RoleType.CHATDEV_COUNSELOR: counselor_prompt_template,
+                RoleType.CHATDEV_CEO: ceo_prompt_template,
+                RoleType.CHATDEV_CHRO: chro_prompt_template,
+                RoleType.CHATDEV_CPO: cpo_prompt_template,
+                RoleType.CHATDEV_CTO: cto_prompt_template,
+                RoleType.CHATDEV_PROGRAMMER: programmer_prompt_template,
+                RoleType.CHATDEV_REVIEWER: reviewer_prompt_template,
+                RoleType.CHATDEV_TESTER: tester_prompt_template,
+                RoleType.CHATDEV_CCO: cco_prompt_template,
+            }
             self.sys_msg_meta_dict_keys = (agenttech_prompt_template.key_words |
                                            counselor_prompt_template.key_words |
                                            ceo_prompt_template.key_words |
@@ -230,8 +230,7 @@ class SingleTxtGenerator:
             ]
 
     def from_role_files(self) -> Generator[str, None, None]:
-        for data in self.data_list:
-            yield data
+        yield from self.data_list
 
 
 class CodeTaskPromptGenerator:

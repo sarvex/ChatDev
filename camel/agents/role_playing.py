@@ -98,13 +98,13 @@ class RolePlaying:
         self.task_type = task_type
 
         if with_task_specify:
-            task_specify_meta_dict = dict()
+            task_specify_meta_dict = {}
             if self.task_type in [TaskType.AI_SOCIETY, TaskType.MISALIGNMENT]:
-                task_specify_meta_dict.update(
-                    dict(assistant_role=assistant_role_name,
-                         user_role=user_role_name))
+                task_specify_meta_dict |= dict(
+                    assistant_role=assistant_role_name, user_role=user_role_name
+                )
             if extend_task_specify_meta_dict is not None:
-                task_specify_meta_dict.update(extend_task_specify_meta_dict)
+                task_specify_meta_dict |= extend_task_specify_meta_dict
 
             task_specify_agent = TaskSpecifyAgent(
                 self.model_type,
@@ -235,7 +235,9 @@ class RolePlaying:
             user_msg: ChatMessage,
             assistant_only: bool,
     ) -> Tuple[ChatAgentResponse, ChatAgentResponse]:
-        assert isinstance(user_msg, ChatMessage), print("broken user_msg: " + str(user_msg))
+        assert isinstance(user_msg, ChatMessage), print(
+            f"broken user_msg: {str(user_msg)}"
+        )
 
         # print("assistant...")
         user_msg_rst = user_msg.set_user_role_at_backend()
