@@ -114,8 +114,7 @@ class TextPrompt(str):
             TextPrompt: A new :obj:`TextPrompt` object with the format string
                 replaced with the formatted string.
         """
-        default_kwargs = {key: '{' + f'{key}' + '}' for key in self.key_words}
-        default_kwargs.update(kwargs)
+        default_kwargs = {key: '{' + f'{key}' + '}' for key in self.key_words} | kwargs
         return TextPrompt(super().format(*args, **default_kwargs))
 
 

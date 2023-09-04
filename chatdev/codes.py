@@ -53,8 +53,7 @@ class Codes:
         differ = difflib.Differ()
         for key in new_codes.codebooks.keys():
             if key not in self.codebooks.keys() or self.codebooks[key] != new_codes.codebooks[key]:
-                update_codes_content = "**[Update Codes]**\n\n"
-                update_codes_content += "{} updated.\n".format(key)
+                update_codes_content = "**[Update Codes]**\n\n" + f"{key} updated.\n"
                 old_codes_content = self.codebooks[key] if key in self.codebooks.keys() else "# None"
                 new_codes_content = new_codes.codebooks[key]
 
@@ -78,7 +77,7 @@ class Codes:
             self.version += 1.0
         if not os.path.exists(directory):
             os.mkdir(self.directory)
-            rewrite_codes_content += "{} Created\n".format(directory)
+            rewrite_codes_content += f"{directory} Created\n"
 
         for filename in self.codebooks.keys():
             filepath = os.path.join(directory, filename)
@@ -88,25 +87,29 @@ class Codes:
 
         if git_management:
             if self.version == 1.0:
-                os.system("cd {}; git init".format(self.directory))
-            os.system("cd {}; git add .".format(self.directory))
-            os.system("cd {}; git commit -m \"{}\"".format(self.directory, self.version))
+                os.system(f"cd {self.directory}; git init")
+            os.system(f"cd {self.directory}; git add .")
+            os.system(f'cd {self.directory}; git commit -m \"{self.version}\"')
 
         log_and_print_online(rewrite_codes_content)
 
     def _get_codes(self) -> str:
-        content = ""
-        for filename in self.codebooks.keys():
-            content += "{}\n```{}\n{}\n```\n\n".format(filename,
-                                                       "python" if filename.endswith(".py") else filename.split(".")[
-                                                           -1], self.codebooks[filename])
-        return content
+        return "".join(
+            f'{filename}\n```{"python" if filename.endswith(".py") else filename.split(".")[-1]}\n{self.codebooks[filename]}\n```\n\n'
+            for filename in self.codebooks.keys()
+        )
 
     def _load_from_hardware(self, directory) -> None:
-        assert len([filename for filename in os.listdir(directory) if filename.endswith(".py")]) > 0
+        assert [
+            filename
+            for filename in os.listdir(directory)
+            if filename.endswith(".py")
+        ]
         for root, directories, filenames in os.walk(directory):
             for filename in filenames:
                 if filename.endswith(".py"):
                     code = open(os.path.join(directory, filename), "r", encoding="utf-8").read()
                     self.codebooks[filename] = self._format_code(code)
-        log_and_print_online("{} files read from {}".format(len(self.codebooks.keys()), directory))
+        log_and_print_online(
+            f"{len(self.codebooks.keys())} files read from {directory}"
+        )

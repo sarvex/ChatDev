@@ -50,10 +50,7 @@ class OpenAIModel(ModelBackend):
     def run(self, *args, **kwargs) -> Dict[str, Any]:
         string = "\n".join([message["content"] for message in kwargs["messages"]])
         encoding = tiktoken.encoding_for_model(self.model_type.value)
-        num_prompt_tokens = len(encoding.encode(string))
-        gap_between_send_receive = 50  # known issue
-        num_prompt_tokens += gap_between_send_receive
-
+        num_prompt_tokens = len(encoding.encode(string)) + 50
         num_max_token_map = {
             "gpt-3.5-turbo": 4096,
             "gpt-3.5-turbo-16k": 16384,
@@ -71,9 +68,8 @@ class OpenAIModel(ModelBackend):
                                                 **self.model_config_dict)
 
         log_and_print_online(
-            "**[OpenAI_Usage_Info Receive]**\nprompt_tokens: {}\ncompletion_tokens: {}\ntotal_tokens: {}\n".format(
-                response["usage"]["prompt_tokens"], response["usage"]["completion_tokens"],
-                response["usage"]["total_tokens"]))
+            f'**[OpenAI_Usage_Info Receive]**\nprompt_tokens: {response["usage"]["prompt_tokens"]}\ncompletion_tokens: {response["usage"]["completion_tokens"]}\ntotal_tokens: {response["usage"]["total_tokens"]}\n'
+        )
         if not isinstance(response, Dict):
             raise RuntimeError("Unexpected return from OpenAI API")
         return response
@@ -90,10 +86,12 @@ class StubModel(ModelBackend):
 
         return dict(
             id="stub_model_id",
-            usage=dict(),
+            usage={},
             choices=[
-                dict(finish_reason="stop",
-                     message=dict(content=ARBITRARY_STRING, role="assistant"))
+                dict(
+                    finish_reason="stop",
+                    message=dict(content=ARBITRARY_STRING, role="assistant"),
+                )
             ],
         )
 
@@ -122,6 +120,4 @@ class ModelFactory:
         if model_type is None:
             model_type = default_model_type
 
-        # log_and_print_online("Model Type: {}".format(model_type))
-        inst = model_class(model_type, model_config_dict)
-        return inst
+        return model_class(model_type, model_config_dict)

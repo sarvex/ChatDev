@@ -50,12 +50,12 @@ class ChatAgentResponse:
     @property
     def msg(self):
         if self.terminated:
-            raise RuntimeError("error in ChatAgentResponse, info:{}".format(str(self.info)))
+            raise RuntimeError(f"error in ChatAgentResponse, info:{str(self.info)}")
         if len(self.msgs) > 1:
             raise RuntimeError("Property msg is only available for a single message in msgs")
         elif len(self.msgs) == 0:
             if len(self.info) > 0:
-                raise RuntimeError("Empty msgs in ChatAgentResponse, info:{}".format(str(self.info)))
+                raise RuntimeError(f"Empty msgs in ChatAgentResponse, info:{str(self.info)}")
             else:
                 # raise RuntimeError("Known issue that msgs is empty and there is no error info, to be fix")
                 return None
@@ -192,8 +192,12 @@ class ChatAgent(BaseAgent):
             if not isinstance(response, dict):
                 raise RuntimeError("OpenAI returned unexpected struct")
             output_messages = [
-                ChatMessage(role_name=self.role_name, role_type=self.role_type,
-                            meta_dict=dict(), **dict(choice["message"]))
+                ChatMessage(
+                    role_name=self.role_name,
+                    role_type=self.role_type,
+                    meta_dict={},
+                    **dict(choice["message"])
+                )
                 for choice in response["choices"]
             ]
             info = self.get_info(

@@ -41,18 +41,18 @@ class ComposedPhase(ABC):
         self.config_phase = config_phase
         self.config_role = config_role
 
-        self.phase_env = dict()
+        self.phase_env = {}
 
         # init chat turn
         self.chat_turn_limit_default = 10
 
         # init role
-        self.role_prompts = dict()
+        self.role_prompts = {}
         for role in self.config_role:
             self.role_prompts[role] = "\n".join(self.config_role[role])
 
         # init all SimplePhases instances in this ComposedPhase
-        self.phases = dict()
+        self.phases = {}
         for phase in self.config_phase:
             assistant_role_name = self.config_phase[phase]['assistant_role_name']
             user_role_name = self.config_phase[phase]['user_role_name']
@@ -180,8 +180,7 @@ class CodeCompleteAll(ComposedPhase):
 
     def update_phase_env(self, chat_env):
         pyfiles = [filename for filename in os.listdir(chat_env.env_dict['directory']) if filename.endswith(".py")]
-        num_tried = defaultdict(int)
-        num_tried.update({filename: 0 for filename in pyfiles})
+        num_tried = defaultdict(int) | {filename: 0 for filename in pyfiles}
         self.phase_env = {
             "max_num_implement": 5,
             "pyfiles": pyfiles,
@@ -192,10 +191,7 @@ class CodeCompleteAll(ComposedPhase):
         return chat_env
 
     def break_cycle(self, phase_env) -> bool:
-        if phase_env['unimplemented_file'] == "":
-            return True
-        else:
-            return False
+        return phase_env['unimplemented_file'] == ""
 
 
 class CodeReview(ComposedPhase):
@@ -209,10 +205,10 @@ class CodeReview(ComposedPhase):
         return chat_env
 
     def break_cycle(self, phase_env) -> bool:
-        if "<INFO> Finished".lower() in phase_env['modification_conclusion'].lower():
-            return True
-        else:
-            return False
+        return (
+            "<INFO> Finished".lower()
+            in phase_env['modification_conclusion'].lower()
+        )
 
 
 class Test(ComposedPhase):
@@ -220,14 +216,13 @@ class Test(ComposedPhase):
         super().__init__(**kwargs)
 
     def update_phase_env(self, chat_env):
-        self.phase_env = dict()
+        self.phase_env = {}
 
     def update_chat_env(self, chat_env):
         return chat_env
 
     def break_cycle(self, phase_env) -> bool:
-        if not phase_env['exist_bugs_flag']:
-            log_and_print_online(f"**[Test Info]**\n\nAI User (Software Test Engineer):\nTest Pass!\n")
-            return True
-        else:
+        if phase_env['exist_bugs_flag']:
             return False
+        log_and_print_online(f"**[Test Info]**\n\nAI User (Software Test Engineer):\nTest Pass!\n")
+        return True
