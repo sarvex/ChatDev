@@ -1,7 +1,11 @@
 # Communicative Agents for Software Development
 
 <p align="center">
-  <img src='./misc/logo1.png' width=400>
+  <img src='./misc/logo1.png' width=600>
+</p>
+
+<p align="center">
+    【English | <a href="README-Chinese.md">Chinese</a>】
 </p>
 
 ## 📖 Overview
@@ -9,7 +13,6 @@
 - **ChatDev** stands as a **virtual software company** that operates through various **intelligent agents** holding different roles, including Chief Executive Officer, Chief Technology Officer, Programmer, Tester, and more. These agents form a multi-agent organizational structure and are united by a mission to "revolutionize the digital world through programming." The agents within ChatDev **collaborate** by participating in specialized functional seminars, including tasks such as designing, coding, testing, and documenting.
 - The primary objective of ChatDev is to offer an **easy-to-use**, **highly customizable** and **extendable** framework, which is based on large language models (LLMs) and serves as an ideal scenario for studying collective intelligence.
 
-*Read this in [中文](README-Chinese.md).*
 
 ## 📰 News
 
