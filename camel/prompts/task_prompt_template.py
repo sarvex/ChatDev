@@ -14,13 +14,7 @@
 from typing import Any, Dict
 
 from camel.prompts import (
-    AISocietyPromptTemplateDict,
-    CodePromptTemplateDict,
-    EvaluationPromptTemplateDict,
-    MisalignmentPromptTemplateDict,
-    SolutionExtractionPromptTemplateDict,
     TextPromptDict,
-    TranslationPromptTemplateDict,
 )
 from camel.typing import TaskType
 
@@ -44,5 +38,4 @@ class TaskPromptTemplateDict(Dict[Any, TextPromptDict]):
             TaskType.TRANSLATION: TranslationPromptTemplateDict(),
             TaskType.EVALUATION: EvaluationPromptTemplateDict(),
             TaskType.SOLUTION_EXTRACTION: SolutionExtractionPromptTemplateDict(),
-            # TaskType.CHATDEV: ChatDevPromptTemplateDict(),
         })

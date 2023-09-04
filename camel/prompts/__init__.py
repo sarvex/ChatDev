@@ -12,26 +12,12 @@
 # limitations under the License.
 # =========== Copyright 2023 @ CAMEL-AI.org. All Rights Reserved. ===========
 from .base import TextPrompt, CodePrompt, TextPromptDict
-from .ai_society import AISocietyPromptTemplateDict
-# from .chat_dev import ChatDevPromptTemplateDict
-from .code import CodePromptTemplateDict
-from .misalignment import MisalignmentPromptTemplateDict
-from .translation import TranslationPromptTemplateDict
-from .solution_extraction import SolutionExtractionPromptTemplateDict
-from .evaluation import EvaluationPromptTemplateDict
 from .task_prompt_template import TaskPromptTemplateDict
 from .prompt_templates import PromptTemplateGenerator
 
 __all__ = [
     'TextPrompt',
-    'CodePrompt',
     'TextPromptDict',
-    'AISocietyPromptTemplateDict',
-    'CodePromptTemplateDict',
-    'MisalignmentPromptTemplateDict',
-    'TranslationPromptTemplateDict',
-    'EvaluationPromptTemplateDict',
     'TaskPromptTemplateDict',
     'PromptTemplateGenerator',
-    'SolutionExtractionPromptTemplateDict',
 ]
